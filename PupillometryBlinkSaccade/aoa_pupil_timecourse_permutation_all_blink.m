@@ -150,13 +150,13 @@ for chan = 1:length(eye_list)
     
     
     %Define channel
-    current_channel = eye_list(chan);
+    current_eye = eye_list(chan);
     current_eye_name = ['E' num2str(eye_list(chan))];
     %aware vs unaware Testing
-    disp(['Running Permutation Tests - ',num2str(current_channel)])
+    disp(['Running Permutation Tests - ',num2str(current_eye)])
     
     %aware vs unaware Testing
-    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_aware_baselined_data(current_channel,:,:)), squeeze(group_unaware_baselined_data(current_channel,:,:)), dependent_samples, ...
+    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_aware_baselined_data(current_eye,:,:)), squeeze(group_unaware_baselined_data(current_eye,:,:)), dependent_samples, ...
         p_threshold, num_permutations, two_sided);
 
     %Find significant clusters pvalue < 0.05
@@ -171,7 +171,7 @@ for chan = 1:length(eye_list)
         'clusters','pval','t_sums','permutation_distribution','sig_clust','sig_time_pts');
 
     %aware-unaware vs Baseline Testing
-    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_aware_minus_unaware_baselined_data(current_channel,:,:)), squeeze(group_aware_minus_unaware_baseline(current_channel,:,:)), dependent_samples, ...
+    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_aware_minus_unaware_baselined_data(current_eye,:,:)), squeeze(group_aware_minus_unaware_baseline(current_eye,:,:)), dependent_samples, ...
         p_threshold, num_permutations, two_sided);
 
     %Find significant clusters pvalue < 0.05
@@ -186,7 +186,7 @@ for chan = 1:length(eye_list)
         'clusters','pval','t_sums','permutation_distribution','sig_clust','sig_time_pts');
   
     %aware vs Baseline Testing
-    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_aware_baselined_data(current_channel,:,:)), squeeze(group_aware_baseline(current_channel,:,:)), dependent_samples, ...
+    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_aware_baselined_data(current_eye,:,:)), squeeze(group_aware_baseline(current_eye,:,:)), dependent_samples, ...
         p_threshold, num_permutations, two_sided);
 
     %Find significant clusters pvalue < 0.05
@@ -201,7 +201,7 @@ for chan = 1:length(eye_list)
         'clusters','pval','t_sums','permutation_distribution','sig_clust','sig_time_pts');
     
     %unaware vs Baseline Testing
-    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_unaware_baselined_data(current_channel,:,:)), squeeze(group_unaware_baseline(current_channel,:,:)), dependent_samples, ...
+    [clusters, pval, t_sums, permutation_distribution] = permutest_TimeCourses(squeeze(group_unaware_baselined_data(current_eye,:,:)), squeeze(group_unaware_baseline(current_eye,:,:)), dependent_samples, ...
         p_threshold, num_permutations, two_sided);
 
     %Find significant clusters pvalue < 0.05
