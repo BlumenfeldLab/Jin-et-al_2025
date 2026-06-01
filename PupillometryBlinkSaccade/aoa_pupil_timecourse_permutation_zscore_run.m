@@ -102,10 +102,10 @@ baseline_window = 1:1000;
 %Subtract main data from subtract data
 group_pc_data = all_avg_pupil_aware - all_avg_pupil_unaware;
 
-%Calculate baseline values [voxel x time x subjects]
+%Calculate baseline values 
 group_pc_baseline = squeeze(nanmean(group_pc_data(:,baseline_window,:),2));
 
-%Convert baseline [channel x time x subjects]
+%Convert baseline 
 group_aware_minus_unaware_baseline = permute(repmat(group_pc_baseline,[1,1,4000]),[1,3,2]);
 
 %Subtract baseline from main data
@@ -116,10 +116,10 @@ aware_minus_unaware_mean_voltage = nanmean(group_aware_minus_unaware_baselined_d
 
 %aware
 
-%Calculate baseline values [channel x subjects]
+%Calculate baseline values 
 group_pc_baseline = squeeze(nanmean(all_avg_pupil_aware(:,baseline_window,:),2));
 
-%Convert baseline [channel x time x subjects]
+%Convert baseline 
 group_aware_baseline = permute(repmat(group_pc_baseline,[1,1,4000]),[1,3,2]);
 
 %Subtract baseline from main data
@@ -130,16 +130,16 @@ aware_mean_voltage = nanmean(group_aware_baselined_data,3);
 
 %unaware
     
-%Calculate baseline values [voxel x time x subjects]
+%Calculate baseline values 
 group_pc_baseline = squeeze(nanmean(all_avg_pupil_unaware(:,baseline_window,:),2));
 
-%Convert baseline [channel x time x subjects]
+%Convert baseline 
 group_unaware_baseline = permute(repmat(group_pc_baseline,[1,1,4000]),[1,3,2]);
 
 %Subtract baseline from main data
 group_unaware_baselined_data = all_avg_pupil_unaware - group_unaware_baseline;
 
-%Mean voltage over subjects
+%Mean pupil diameter z-score over subjects
 unaware_mean_voltage = nanmean(group_unaware_baselined_data,3);
 
 
@@ -159,7 +159,6 @@ for chan = 1:length(eye_list)
     
     %Define channel
     current_channel = eye_list(chan);
-    %current_eye_name = eye_name{chan};
     current_eye_name = ['E' num2str(eye_list(chan))];
     %aware vs unaware Testing
     disp(['Running Permutation Tests - ',num2str(current_channel)])
