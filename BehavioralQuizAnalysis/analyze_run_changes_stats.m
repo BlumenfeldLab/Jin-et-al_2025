@@ -284,7 +284,7 @@ end
 
 pvalues_to_run_1 =  mafdr( pvalue_vector_unawareness, 'BHFDR', true)
 
-pvalues_to_run_1_signrank =  mafdr( pvalue_vector_unawareness_signrank, 'BHFDR', true)
+pvalues_to_run_1_signrank_unawareness =  mafdr( pvalue_vector_unawareness_signrank, 'BHFDR', true)
 
 %%
 pvalue_vector_confidence = []; 
