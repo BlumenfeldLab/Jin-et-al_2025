@@ -1,12 +1,19 @@
-%% This data analyzes the run-by-run changes in awareness, unawareness, accuracy, and confidence
-
 load('Y:\HNCT_AoA_Study\AoA_Subjects\allSessionRunAccuracyAwarenessConfidence.mat')
 load('Y:\HNCT_AoA_Study\AoA_Subjects\allSessionRunAccuracyUnawarenessConfidence.mat')
 
 % Example data with missing values
 timepoints = {'Run 1', 'Run 2', 'Run 3', 'Run 4', 'Run 5', 'Run 6'};
 std_calc_data = allSessionRunsUnawareness;
-
+% for row = 1:length(allSessionRunsConfidence)
+%     allSessionRunsConfidence(row,:) = allSessionRunsConfidence(row,:)-allSessionRunsConfidence(row,1);
+% end
+% for row = 1:length(allSessionRunsAccuracy)
+%     allSessionRunsAccuracy(row,:) = allSessionRunsAccuracy(row,:)-allSessionRunsAccuracy(row,1);
+% end
+% for row = 1:length(allSessionRunsUnawareness)
+%     allSessionRunsUnawareness(row,:) = allSessionRunsUnawareness(row,:)-allSessionRunsUnawareness(row,1);
+% end
+%%
 types = {'Unawareness','Accuracy','Confidence','Awareness'};
 ylabels = {'Percentage Point Change From Run 1','Percentage Point Change From Run 1','Percentile Point Change From Run 1','Percentage Point Change From Run 1'};
 
@@ -101,7 +108,7 @@ for day = 2:3
     end
 end
 
-%% Aggregate individual subjects, based on the two days of testing
+%%
 
 allSubjectSessionWeighted = [unique(allSessionRunsSubject)'; cell(4,length(unique(allSessionRunsSubject)))];
 for session = 1:length(allSessionRunsAccuracy)
@@ -183,7 +190,7 @@ plot(1:6,nanmean(twoDayMeanConfidence),'LineWidth',3,'Color','b')
 % plot(1:6,nanmean(twoDayMeanConfidence)+[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'Color','b','LineStyle','--')
 % plot(1:6,nanmean(twoDayMeanConfidence)-[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'Color','b','LineStyle','--')
 errorbar(nanmean(twoDayMeanConfidence),[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'linestyle','none','LineWidth',3,'Color','r')
-%scatter([4 5 6], [52 52 52],256,'*','black','LineWidth',3)
+scatter([4 5 6], [52 52 52],256,'*','black','LineWidth',3)
 set(gca,'FontSize',24)
 xlim([1 6])
 ylim([45 55])
@@ -203,7 +210,7 @@ figure;
 hold on;
 plot(1:6,nanmean(twoDayMeanUnawareness),'LineWidth',3,'Color','b')
 errorbar(nanmean(twoDayMeanUnawareness),[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'linestyle','none','LineWidth',3,'Color','r')
-%scatter([5 6], [23 23],256,'*','black','LineWidth',3)
+scatter([5 6], [23 23],256,'*','black','LineWidth',3)
 set(gca,'FontSize',24)
 xlim([1 6])
 ylim([10 25])
@@ -233,18 +240,24 @@ ci95 = [critical_run1*semRun1 critical_run2*semRun2 critical_run3*semRun3 critic
 figure;
 hold on;
 plot(1:6,nanmean(twoDayMeanAwareness),'LineWidth',3,'Color','b')
+% plot(1:6,nanmean(twoDayMeanAwareness)+ci95,'Color','b','LineStyle','--')
+% plot(1:6,nanmean(twoDayMeanAwareness)-ci95,'Color','b','LineStyle','--')
+
+
+% plot(1:6,nanmean(twoDayMeanAwareness)+[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'Color','b','LineStyle','--')
+% plot(1:6,nanmean(twoDayMeanAwareness)-[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'Color','b','LineStyle','--')
 errorbar(nanmean(twoDayMeanAwareness),[semRun1 semRun2 semRun3 semRun4 semRun5 semRun6],'linestyle','none','LineWidth',3,'Color','r')
 set(gca,'FontSize',24)
 xlim([1 6])
 ylim([15 30])
-%scatter([2 4 6], [28 28 28],256,'*','black','LineWidth',3)
+scatter([2 4 6], [28 28 28],256,'*','black','LineWidth',3)
 ax = gca;
 ax.XTick = unique( round(ax.XTick) );
 xlabel(['Run'])
 ylabel('Awareness Percentage')
 title(['Subject Session Awareness Averages, N = ' num2str(length(twoDayMeanAwareness))])
 
-%% Perform Benjamini-Hochberg correction for awareness
+%%
 
 pvalue_vector_awareness = []; 
 pvalue_vector_awareness_signrank = [];
@@ -255,11 +268,10 @@ for test = 2:6
     pvalue_vector_awareness_signrank = [pvalue_vector_awareness_signrank p];
 end
 
-pvalues_to_run_1 =  mafdr( pvalue_vector_awareness, 'BHFDR', true)
+pvalues_to_run_1_awareness =  mafdr( pvalue_vector_unawareness, 'BHFDR', true)
 
 pvalues_to_run_1_signrank_awareness =  mafdr( pvalue_vector_awareness_signrank, 'BHFDR', true)
-
-%% Perform Benjamini-Hochberg correction for unawareness
+%%
 
 pvalue_vector_unawareness = []; 
 pvalue_vector_unawareness_signrank = [];
@@ -272,23 +284,23 @@ end
 
 pvalues_to_run_1 =  mafdr( pvalue_vector_unawareness, 'BHFDR', true)
 
-pvalues_to_run_1_signrank_unawareness =  mafdr( pvalue_vector_unawareness_signrank, 'BHFDR', true)
+pvalues_to_run_1_signrank =  mafdr( pvalue_vector_unawareness_signrank, 'BHFDR', true)
 
-%% Perform Benjamini-Hochberg procedure for confidence
+%%
 pvalue_vector_confidence = []; 
-pvalue_vector_confidence_signrank = [];
+pvalue_vector_unawareness_signrank = [];
 for test = 2:6
     [h,p] = ttest(twoDayMeanConfidence(:,1),twoDayMeanConfidence(:,test));
     pvalue_vector_confidence = [pvalue_vector_confidence p];
     p = signrank(twoDayMeanConfidence(:,1),twoDayMeanConfidence(:,test));
-    pvalue_vector_confidence_signrank = [pvalue_vector_confidence_signrank p];
+    pvalue_vector_unawareness_signrank = [pvalue_vector_unawareness_signrank p];
 end
 
 pvalues_to_run_1_confidence =  mafdr( pvalue_vector_confidence, 'BHFDR', true)
 
-pvalues_to_run_1_signrank_confidence =  mafdr( pvalue_vector_confidence_signrank, 'BHFDR', true)
+pvalues_to_run_1_signrank_confidence =  mafdr( pvalue_vector_unawareness_signrank, 'BHFDR', true)
 
-%% Perform Benjamini-Hochberg correction for accuracy
+%%
 
 
 pvalue_vector_accuracy = []; 
@@ -305,7 +317,7 @@ pvalues_to_run_1_accuracy =  mafdr( pvalue_vector_accuracy, 'BHFDR', true)
 pvalues_to_run_1_signrank_accuracy =  mafdr( pvalue_vector_accuracy_signrank, 'BHFDR', true)
 
 
-%% Calculate correlation coefficients for run against metric
+%%
 
 allSessionRunPearsonsAccuracy = [];
 for session = 1:128
@@ -370,6 +382,19 @@ end
 full_table = array2table(full_table);
 full_table.Properties.VariableNames = {'Accuracy','Confidence','Awareness','Unawareness','Run','Subject'};
 
+
+% % Convert 'subject' and 'run' to categorical if they are not already
+% full_table.Subject = categorical(full_table.Subject);
+% full_table.Run = categorical(full_table.Run);
+% 
+% % Fit the repeated measures model
+% rm = fitrm(full_table, 'Unawareness ~ Run', 'WithinDesign', full_table.Run, 'WithinModel', 'Run');
+% 
+% % Run the repeated measures ANOVA
+% ranovatbl = ranova(rm);
+% 
+% % Display the results
+% disp(ranovatbl);
 
 
 %%
